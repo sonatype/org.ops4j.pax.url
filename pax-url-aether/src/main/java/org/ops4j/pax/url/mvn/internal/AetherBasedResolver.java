@@ -50,6 +50,7 @@ import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.crypto.DefaultSettingsDecrypter;
 import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.apache.maven.settings.crypto.SettingsDecryptionRequest;
@@ -143,7 +144,7 @@ public class AetherBasedResolver implements MavenResolver {
     final private ProxySelector m_proxySelector;
     final private CloseableHttpClient m_client;
     private Settings m_settings;
-    private ConfigurableSettingsDecrypter decrypter;
+    private DefaultSettingsDecrypter decrypter;
 
     private LocalRepository localRepository;
     private final ConcurrentMap<LocalRepository, Deque<RepositorySystemSession>> sessions
@@ -1217,7 +1218,6 @@ public class AetherBasedResolver implements MavenResolver {
         locator.addService(TransporterFactory.class, WagonTransporterFactory.class);
         locator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
 
-        decrypter = new ConfigurableSettingsDecrypter();
         PaxUrlSecDispatcher secDispatcher = new PaxUrlSecDispatcher();
         try {
             secDispatcher.setCipher(new DefaultPlexusCipher());
@@ -1225,7 +1225,7 @@ public class AetherBasedResolver implements MavenResolver {
             throw new IllegalStateException(exc);
         }
         secDispatcher.setConfigurationFile(m_config.getSecuritySettings());
-        decrypter.setSecurityDispatcher(secDispatcher);
+        decrypter = new DefaultSettingsDecrypter(secDispatcher);
 
         locator.setServices(SettingsDecrypter.class, decrypter);
 

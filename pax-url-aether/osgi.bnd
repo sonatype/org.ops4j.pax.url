@@ -19,13 +19,20 @@ Import-Package:\
   org.osgi.service.cm; resolution:=optional,\
   org.osgi.util.tracker;version="[1.4,2)",\
   !com.google.inject.*,\
+  !javax.annotation.*,\
   !javax.enterprise.inject.*,\
   !javax.inject.*,\
+  !javax.lang.*,\
+  !javax.servlet.*,\
+  !javax.tools.*,\
+  !junit.*,\
   !org.apache.commons.lang.*,\
   !org.codehaus.classworlds.*,\
   !org.codehaus.plexus.*,\
   !org.jsoup.*,\
+  !org.junit.*,\
   !org.eclipse.sisu.*,\
+  !org.testng.*,\
   *
 
 Export-Package:\
